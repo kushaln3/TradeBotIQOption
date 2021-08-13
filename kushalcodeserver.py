@@ -35,14 +35,18 @@ CHECKING IF WEBSITES ARE UP....''')
 
         while codeserverStatus == "Down":
             print("Starting code-server...")
-            subprocess.Popen("cd ~/code-server-3.10.2-linux-arm64/ && ./code-server", shell= True)
-            time.sleep(60)
+            subprocess.Popen("cd ~/code-server-3.10.2-linux-arm64/ && export PASSWORD='Kushal#07' && ./code-server", shell= True)
+            time.sleep(40)
+            codeserverStatus = CheckWebsiteUp("http://localhost:8080")
+            print("Code Server is ", codeserverStatus)
 
 
         while tunnelStatus == "Down":
             print("Starting tunnel ...")
             subprocess.Popen(f"lt --port 8080 --subdomain {tunnelName}", shell= True)
-            time.sleep(60)
+            time.sleep(40)
+            tunnelStatus = CheckWebsiteUp(f"https://{tunnelName}.loca.lt")
+            print("Tunnel is ", tunnelStatus, "\n\n")
 
         time.sleep(120)
 
