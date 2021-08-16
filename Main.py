@@ -1,8 +1,11 @@
 from iqoptionapi.stable_api import IQ_Option
 import time
+from configparser import ConfigParser
 
+config = ConfigParser()
+config.read('config.ini')
 
-trader = IQ_Option("kushalnjnv10@gmail.com", "Kushal#07")
+trader = IQ_Option(config['account']['email'], config['account']['password'])
 trader.connect()
 
 
@@ -116,7 +119,7 @@ try:
                 Increment = Incremental(ACTIVES)
                 print('Increment is', Increment)
                 Money = round(Money*Increment)
-                
+
 
 except KeyboardInterrupt:
     print("Exiting...")
