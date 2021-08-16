@@ -1,7 +1,11 @@
 from iqoptionapi.stable_api import IQ_Option
-trader = IQ_Option("kushalnjnv10@gmail.com", "Kushal#07")
+import time
 
+
+trader = IQ_Option("kushalnjnv10@gmail.com", "Kushal#07")
 trader.connect()
+
+
 
 def SMA():
     candles = trader.get_candles(ACTIVES, 15, 28, time.time())
@@ -25,10 +29,13 @@ def SMA():
         return(False)
 
 
+
 def Result(id):
     if trader.check_win_v3(id) >= 0:
+        print(f"Profit: {trader.check_win_v3(id)} {trader.get_currency()}")
         return(True)
     else:
+        print(f"Loss: {trader.check_win_v3(id)} {trader.get_currency()}")
         return(False)
 
 
@@ -41,31 +48,76 @@ def ChangedAction(ACTION):
 
 
 
+def IsOpen(ACTIVES):
+    Isopen = (((trader.get_all_open_time())['binary'])[ACTIVES])['open']
 
-while True:
-
-    Money=1
-
-    Increment = 2.0
-
-    ACTIVES="EURUSD"
-
-    ACTION="call"#or "put"
-
-    expirations_mode=1
+    if Isopen == {} or Isopen == False or ((trader.get_all_profit())[ACTIVES])['turbo'] == {}:
+        return(False)
+    else:
+        return(True)
 
 
+
+def Incremental(ACTIVES):
+    profit_percent = ((trader.get_all_profit())[ACTIVES])['turbo']
+    print('profit percent:  ', profit_percent, "\n")
+    Increment = (1-profit_percent) + 2.05
+    return(Increment)
+
+
+
+def ChangeACTIVES():
+    openACTIVES = trader.get_all_profit()
+    open_list = {}
+    for openACTIVE in openACTIVES:
+        ACTIVE = (openACTIVES[openACTIVE])['turbo']
+        if not ACTIVE == {}:
+            open_list[openACTIVE] = ACTIVE
+
+    print(open_list)
+    max_key = max(open_list, key=open_list.get)
+    return(max_key)
+
+
+
+try:
     while True:
-        check, id = trader.buy(Money, ACTIVES, ACTION, expirations_mode)
 
-        if check: print(f"{ACTION} order succcessful")
-        else: print(f"{ACTION} order failed")
+        Money=1
 
-        result = Result(id)
+        ACTIVES="EURGBP"
 
-        if result:
-            break
-        else:
-            Money = round(Money*Increment)
-            ACTION = ChangedAction(ACTION)
+        ACTION="call"#or "put"
 
+        expirations_mode=1
+
+        currency = trader.get_currency()
+
+
+        while True:
+            if not IsOpen(ACTIVES):
+                ACTIVES = ChangeACTIVES()
+            
+            if SMA():
+                ACTION = "call"
+            else:
+                ACTION = "put"
+            check, id = trader.buy(Money, ACTIVES, ACTION, expirations_mode)
+
+            if check: print(f"{ACTION} order succcessful")
+            else:
+                print(f"{ACTION} order failed")
+
+            result = Result(id)
+
+            if result:
+                break
+            else:
+                Increment = Incremental(ACTIVES)
+                print('Increment is', Increment)
+                Money = round(Money*Increment)
+                
+
+except KeyboardInterrupt:
+    print("Exiting...")
+    exit()
