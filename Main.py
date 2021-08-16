@@ -1,8 +1,28 @@
 from iqoptionapi.stable_api import IQ_Option
-
 trader = IQ_Option("kushalnjnv10@gmail.com", "Kushal#07")
 
 trader.connect()
+
+def SMA():
+    candles = trader.get_candles(ACTIVES, 15, 28, time.time())
+    sma7vals = []
+    for candle in candles:
+        sma7vals.append(candle['close'])
+
+
+
+    candles = trader.get_candles(ACTIVES, 15, 56, time.time())
+    sma14vals = []
+    for candle in candles:
+        sma14vals.append(candle['close'])
+
+    if sum(sma7vals)/len(sma7vals) > sum(sma14vals)/len(sma14vals):
+        pass
+        print("SMA: Call")
+        return(True)
+    else:
+        print("SMA: Put")
+        return(False)
 
 
 def Result(id):
