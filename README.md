@@ -47,7 +47,7 @@ $$S_{next} = S_{current} \times k$$
 
 
 ### 2. The Loop
-1.  **Entry:** Trigger a trade based on signal.
+1.  **Entry:** Trigger a trade based on signal.(I just took random call and put signals as we  had no aim of predicting.)
 2.  **Win:** Reset stake to Base Amount ($S_{base}$).
 3.  **Loss:** Multiply stake by $k$ and immediately re-enter.
 4.  **Stop:** If the chain length exceeds $N$ trades (Stop Loss), reset to $S_{base}$ to preserve remaining capital.
@@ -61,17 +61,20 @@ $$S_{next} = S_{current} \times k$$
 **My Observation:** I noticed that while the probability of winning *eventually* is 100%, the probability of *ruin* (losing the entire account) increases drastically with chain length.
 
 ### Challenge 2: Parameter Optimization
-**Problem:** Picking arbitrary values for $k$ (multiplier) and $N$ (Stop Loss limit) was gambling, not trading.
+**Problem:** Picking arbitrary values for $k$ (multiplier) and $N$ (Stop Loss limit) was like gambling, not a probabilistic approach.
 **Solution (The Simulation Engine):**
-* I wrote a Python script using the `random` module to simulate millions of trade outcomes based on the broker's win/loss probability (approx. 50/50).
+* I wrote a Python script using the `random` module to simulate millions of trade outcomes based on the broker's win/loss probability (i took approx. 50/50).
 * **Optimization:** The engine tested various combinations of $k$ and $N$.
-* **Result:** I identified the "Sweet Spot"—a specific Stop Loss limit that maximized the probability of net profit while keeping the risk of "Account Blowout" statistically low (e.g., $< 1\%$).
+* **Result:** I tried to identify the "Sweet Spot"—a specific Stop Loss limit that maximized the probability of net profit while keeping the risk of "Account Blowout" statistically low (e.g., $< 1\%$).
 
 ---
 
 ## 📂 Verification & Data
+I had tested my bot for around 3 days (1400 trades) continuosly before the optimization, and the results were quite astonishing, I started out with a $10,000 dummy account in IQOption with 1$ trades and then switched to $10 trades, I hit a max account balance of $33,000. But as I said, with upsides come downsides too, after the third day, I hit a tragic 8 continuos loss chain which ate up all my money. I had stopped working on it since then, but plan to continue to do so: To optimize the stop loss and k. 
 I have included the raw trading history export from my IQOption account to demonstrate the real-world application of this logic.
 * 📄 **View History:** [data/iqoption_history.html](./data/iqoption_history.html)
+
+* I lost my Tradebot code which i initially used in my laptop hard drive failure. Bu t I have included the simulation engine jupyter notebook and trade history
 
 ---
 
