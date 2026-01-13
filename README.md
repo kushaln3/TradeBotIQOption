@@ -72,7 +72,7 @@ $$S_{next} = S_{current} \times k$$
 ## 📂 Verification & Data
 I had tested my bot for around 3 days (1400 trades) continuosly before the optimization, and the results were quite astonishing, I started out with a $10,000 dummy account in IQOption with 1$ trades and then switched to $10 trades, I hit a max account balance of $33,000. But as I said, with upsides come downsides too, after the third day, I hit a tragic 8 continuos loss chain which ate up all my money. I had stopped working on it since then, but plan to continue to do so: To optimize the stop loss and k. 
 I have included the raw trading history export from my IQOption account to demonstrate the real-world application of this logic.
-* 📄 **View History:** [/trade_history/trading_history.html](./trade_history/trading_history.html)
+* 📄 **View History:** [/trade_history/trading_history.html](https://kushaln3.github.io/TradeBotIQOption/trade_history/trading_history.html)
 
 * I lost my Tradebot code which i initially used in my laptop hard drive failure. Bu t I have included the simulation engine jupyter notebook and trade history
 
